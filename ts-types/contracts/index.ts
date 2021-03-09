@@ -14,6 +14,7 @@ export type { MirrorENSRegistrar } from "./MirrorENSRegistrar";
 export type { MirrorENSResolver } from "./MirrorENSResolver";
 export type { MirrorENSReverseRegistrar } from "./MirrorENSReverseRegistrar";
 export type { MirrorBatchRegistration } from "./MirrorBatchRegistration";
+export type { WriteDistributionHelperV1 } from "./WriteDistributionHelperV1";
 export type { IMirrorWriteToken } from "./IMirrorWriteToken";
 export type { MirrorWriteToken } from "./MirrorWriteToken";
 
@@ -30,5 +31,6 @@ export { MirrorENSRegistrar__factory } from "./factories/MirrorENSRegistrar__fac
 export { MirrorENSResolver__factory } from "./factories/MirrorENSResolver__factory";
 export { MirrorENSReverseRegistrar__factory } from "./factories/MirrorENSReverseRegistrar__factory";
 export { MirrorBatchRegistration__factory } from "./factories/MirrorBatchRegistration__factory";
+export { WriteDistributionHelperV1__factory } from "./factories/WriteDistributionHelperV1__factory";
 export { IMirrorWriteToken__factory } from "./factories/IMirrorWriteToken__factory";
 export { MirrorWriteToken__factory } from "./factories/MirrorWriteToken__factory";
