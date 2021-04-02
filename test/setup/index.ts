@@ -12,6 +12,10 @@ async function setup() {
   const mirrorWriteToken = await MirrorWriteToken.deploy();
   await mirrorWriteToken.deployed();
 
+  const WriteDistributionHelper = await ethers.getContractFactory("WriteDistributionHelperV1");
+  const writeDistributionHelper = await WriteDistributionHelper.deploy(mirrorWriteToken.address);
+  await writeDistributionHelper.deployed();
+
   const MirrorBatchRegistration = await ethers.getContractFactory("MirrorBatchRegistration");
   const mirrorBatchRegistration = await MirrorBatchRegistration.deploy(mirrorWriteToken.address);
   await mirrorBatchRegistration.deployed();
@@ -67,6 +71,7 @@ async function setup() {
     reverseRegistrar,
     mirrorENSResolver,
     mirrorBatchRegistration,
+    writeDistributionHelper
   };
 }
 
