@@ -2,7 +2,6 @@ import { expect } from "chai";
 import { BigNumber } from "ethers";
 import { ethers } from "hardhat";
 import BalanceTree from "../merkle-distribution/balance-tree";
-import MerkleTree from "../merkle-distribution/merkle-tree";
 
 import setup from "./setup";
 
