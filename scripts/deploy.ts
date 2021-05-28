@@ -9,22 +9,22 @@ const config = {
   production: {
     ENS_REGISTRY_ADDRESS: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
     ROOT_NAME: "mirror.xyz",
-    ROOT_NODE: ethers.utils.namehash("mirror.xyz")
+    ROOT_NODE: ethers.utils.namehash("mirror.xyz"),
   },
   test: {
     ENS_REGISTRY_ADDRESS: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
     ROOT_NAME: "mirror.test",
-    ROOT_NODE: ethers.utils.namehash("mirror.test")
-  }
-}
+    ROOT_NODE: ethers.utils.namehash("mirror.test"),
+  },
+};
 
 const NETWORK_MAP = {
-  '0': 'mainnet',
-  '3': 'ropsten',
-  '4': 'rinkeby',
-  '1337': 'hardhat',
-  '31337': 'hardhat',
-}
+  "0": "mainnet",
+  "3": "ropsten",
+  "4": "rinkeby",
+  "1337": "hardhat",
+  "31337": "hardhat",
+};
 
 let isLocal = false;
 
@@ -34,7 +34,7 @@ async function main() {
 
   console.log(`Deploying to ${networkName}`);
 
-  isLocal = (networkName === "hardhat");
+  isLocal = networkName === "hardhat";
 
   let owner;
   let ensAddress;
@@ -44,24 +44,16 @@ async function main() {
   let ROOT_NODE;
 
   if (networkName === "mainnet") {
-    ({
-      ENS_REGISTRY_ADDRESS,
-      ROOT_NAME,
-      ROOT_NODE,
-    } = config.production);
+    ({ ENS_REGISTRY_ADDRESS, ROOT_NAME, ROOT_NODE } = config.production);
   } else {
-    ({
-      ENS_REGISTRY_ADDRESS,
-      ROOT_NAME,
-      ROOT_NODE,
-    } = config.test);
+    ({ ENS_REGISTRY_ADDRESS, ROOT_NAME, ROOT_NODE } = config.test);
   }
 
   if (isLocal) {
     console.log("deploying ENS registry");
-    const ENSRegistry = await ethers.getContractFactory('ENSRegistry')
-    ensRegistry = await ENSRegistry.deploy()
-    await ensRegistry.deployed()
+    const ENSRegistry = await ethers.getContractFactory("ENSRegistry");
+    ensRegistry = await ENSRegistry.deploy();
+    await ensRegistry.deployed();
 
     ensAddress = ensRegistry.address;
   } else {
@@ -74,17 +66,25 @@ async function main() {
   await mirrorWriteToken.deployed();
 
   console.log("Deploying Batch Registration");
-  const MirrorBatchRegistration = await ethers.getContractFactory("MirrorBatchRegistration");
-  const mirrorBatchRegistration = await MirrorBatchRegistration.deploy(mirrorWriteToken.address);
+  const MirrorBatchRegistration = await ethers.getContractFactory(
+    "MirrorBatchRegistration"
+  );
+  const mirrorBatchRegistration = await MirrorBatchRegistration.deploy(
+    mirrorWriteToken.address
+  );
   await mirrorBatchRegistration.deployed();
 
   console.log("Deploying ENS Resolver");
-  const MirrorENSResolver = await ethers.getContractFactory("MirrorENSResolver");
+  const MirrorENSResolver = await ethers.getContractFactory(
+    "MirrorENSResolver"
+  );
   const mirrorENSResolver = await MirrorENSResolver.deploy();
   await mirrorENSResolver.deployed();
 
   console.log("Deploying ENS Registrar");
-  const MirrorENSRegistrar = await ethers.getContractFactory("MirrorENSRegistrar");
+  const MirrorENSRegistrar = await ethers.getContractFactory(
+    "MirrorENSRegistrar"
+  );
   const mirrorENSRegistrar = await MirrorENSRegistrar.deploy(
     ROOT_NAME,
     ROOT_NODE,
@@ -100,10 +100,6 @@ async function main() {
     owner = accounts[0].address;
     owner = accounts[0];
 
-    const ReverseRegistrar = await ethers.getContractFactory('MirrorENSReverseRegistrar')
-    const reverseRegistrar = await ReverseRegistrar.deploy(ensRegistry.address, mirrorENSRegistrar.address)
-    await reverseRegistrar.deployed()
-
     // Setup root.
     await ensRegistry.setSubnodeOwner(
       ZERO_BYTES32,
@@ -115,24 +111,12 @@ async function main() {
       ethers.utils.keccak256(ethers.utils.toUtf8Bytes("mirror")),
       mirrorENSRegistrar.address
     );
-    await ensRegistry.setSubnodeOwner(
-      ZERO_BYTES32,
-      ethers.utils.keccak256(ethers.utils.toUtf8Bytes('reverse')),
-      owner.address
-    )
-    await ensRegistry.setSubnodeOwner(
-      ethers.utils.namehash('reverse'),
-      ethers.utils.keccak256(ethers.utils.toUtf8Bytes('addr')),
-      reverseRegistrar.address,
-    )
   }
 
   console.log("Setting registrar on $WRITE");
   await mirrorWriteToken.setENSRegistrar(mirrorENSRegistrar.address);
   console.log("Transferring ownership of Resolver to Registrar");
   await mirrorENSResolver.transferOwnership(mirrorENSRegistrar.address);
-  console.log("Updating ENS Reverse Registrar");
-  await mirrorENSRegistrar.updateENSReverseRegistrar();
 
   const info = {
     Contracts: {
@@ -140,13 +124,16 @@ async function main() {
       MirrorENSResolver: mirrorENSResolver.address,
       MirrorENSRegistrar: mirrorENSRegistrar.address,
       MirrorBatchRegistration: mirrorBatchRegistration.address,
-    }
+    },
   };
 
   console.log(info);
 
   if (!isLocal) {
-    fs.writeFileSync(`${__dirname}/../networks/${networkName}.json`, JSON.stringify(info, null, 2));
+    fs.writeFileSync(
+      `${__dirname}/../networks/${networkName}.json`,
+      JSON.stringify(info, null, 2)
+    );
   }
 }
 

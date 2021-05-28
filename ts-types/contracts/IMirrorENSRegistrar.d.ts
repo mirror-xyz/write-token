@@ -23,8 +23,9 @@ import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 interface IMirrorENSRegistrarInterface extends ethers.utils.Interface {
   functions: {
     "changeRootNodeOwner(address)": FunctionFragment;
+    "changeSubnodeOwner(string,address)": FunctionFragment;
+    "labelOwner(string)": FunctionFragment;
     "register(string,address)": FunctionFragment;
-    "updateENSReverseRegistrar()": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -32,23 +33,25 @@ interface IMirrorENSRegistrarInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "register",
+    functionFragment: "changeSubnodeOwner",
     values: [string, string]
   ): string;
+  encodeFunctionData(functionFragment: "labelOwner", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "updateENSReverseRegistrar",
-    values?: undefined
+    functionFragment: "register",
+    values: [string, string]
   ): string;
 
   decodeFunctionResult(
     functionFragment: "changeRootNodeOwner",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "register", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "updateENSReverseRegistrar",
+    functionFragment: "changeSubnodeOwner",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "labelOwner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "register", data: BytesLike): Result;
 
   events: {};
 }
@@ -77,6 +80,25 @@ export class IMirrorENSRegistrar extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
+    changeSubnodeOwner(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "changeSubnodeOwner(string,address)"(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    labelOwner(label: string, overrides?: CallOverrides): Promise<[string]>;
+
+    "labelOwner(string)"(
+      label: string,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     register(
       label_: string,
       owner_: string,
@@ -86,14 +108,6 @@ export class IMirrorENSRegistrar extends Contract {
     "register(string,address)"(
       label_: string,
       owner_: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    updateENSReverseRegistrar(
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    "updateENSReverseRegistrar()"(
       overrides?: Overrides
     ): Promise<ContractTransaction>;
   };
@@ -108,6 +122,25 @@ export class IMirrorENSRegistrar extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
+  changeSubnodeOwner(
+    label_: string,
+    newOwner_: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "changeSubnodeOwner(string,address)"(
+    label_: string,
+    newOwner_: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  labelOwner(label: string, overrides?: CallOverrides): Promise<string>;
+
+  "labelOwner(string)"(
+    label: string,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
   register(
     label_: string,
     owner_: string,
@@ -117,14 +150,6 @@ export class IMirrorENSRegistrar extends Contract {
   "register(string,address)"(
     label_: string,
     owner_: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  updateENSReverseRegistrar(
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  "updateENSReverseRegistrar()"(
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
@@ -139,6 +164,25 @@ export class IMirrorENSRegistrar extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    changeSubnodeOwner(
+      label_: string,
+      newOwner_: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "changeSubnodeOwner(string,address)"(
+      label_: string,
+      newOwner_: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    labelOwner(label: string, overrides?: CallOverrides): Promise<string>;
+
+    "labelOwner(string)"(
+      label: string,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
     register(
       label_: string,
       owner_: string,
@@ -150,10 +194,6 @@ export class IMirrorENSRegistrar extends Contract {
       owner_: string,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    updateENSReverseRegistrar(overrides?: CallOverrides): Promise<void>;
-
-    "updateENSReverseRegistrar()"(overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {};
@@ -169,6 +209,25 @@ export class IMirrorENSRegistrar extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
+    changeSubnodeOwner(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "changeSubnodeOwner(string,address)"(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    labelOwner(label: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "labelOwner(string)"(
+      label: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     register(
       label_: string,
       owner_: string,
@@ -180,10 +239,6 @@ export class IMirrorENSRegistrar extends Contract {
       owner_: string,
       overrides?: Overrides
     ): Promise<BigNumber>;
-
-    updateENSReverseRegistrar(overrides?: Overrides): Promise<BigNumber>;
-
-    "updateENSReverseRegistrar()"(overrides?: Overrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -197,6 +252,28 @@ export class IMirrorENSRegistrar extends Contract {
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
+    changeSubnodeOwner(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "changeSubnodeOwner(string,address)"(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    labelOwner(
+      label: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "labelOwner(string)"(
+      label: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     register(
       label_: string,
       owner_: string,
@@ -206,14 +283,6 @@ export class IMirrorENSRegistrar extends Contract {
     "register(string,address)"(
       label_: string,
       owner_: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    updateENSReverseRegistrar(
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    "updateENSReverseRegistrar()"(
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
   };

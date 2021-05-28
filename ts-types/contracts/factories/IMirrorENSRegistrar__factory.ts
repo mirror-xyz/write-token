@@ -39,18 +39,48 @@ const _abi = [
       },
       {
         internalType: "address",
-        name: "owner_",
+        name: "newOwner_",
         type: "address",
       },
     ],
-    name: "register",
+    name: "changeSubnodeOwner",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [],
-    name: "updateENSReverseRegistrar",
+    inputs: [
+      {
+        internalType: "string",
+        name: "label",
+        type: "string",
+      },
+    ],
+    name: "labelOwner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "label_",
+        type: "string",
+      },
+      {
+        internalType: "address",
+        name: "owner_",
+        type: "address",
+      },
+    ],
+    name: "register",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
