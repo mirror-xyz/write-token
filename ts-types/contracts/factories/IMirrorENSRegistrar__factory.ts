@@ -20,19 +20,6 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "newOwner_",
-        type: "address",
-      },
-    ],
-    name: "changeRootNodeOwner",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "string",
         name: "label_",
         type: "string",
@@ -43,7 +30,20 @@ const _abi = [
         type: "address",
       },
     ],
-    name: "changeSubnodeOwner",
+    name: "changeLabelOwner",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner_",
+        type: "address",
+      },
+    ],
+    name: "changeRootNodeOwner",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

@@ -8,5 +8,6 @@ interface IMirrorENSRegistrar {
 
     function labelOwner(string calldata label) external view returns (address);
 
-    function changeSubnodeOwner(string calldata label_, address newOwner_) external;
+    function changeLabelOwner(string calldata label_, address newOwner_)
+        external;
 }

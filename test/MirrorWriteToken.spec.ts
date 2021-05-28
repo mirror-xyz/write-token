@@ -240,32 +240,40 @@ describe("MirrorWriteToken", () => {
           });
         });
 
-        describe("changeSubnodeOwner", () => {
-          it("allows the owner to change ENS ownership via Registrar", async () => {
-            await mirrorENSRegistrar
-              .connect(account2)
-              .changeSubnodeOwner(label, account3.address);
-            const result = await mirrorENSRegistrar.labelOwner(label);
-            expect(result).to.eq(account3.address);
+        describe("changeLabelOwner", () => {
+          describe("when the owner changes the label", () => {
+            beforeEach(async () => {
+              // Change from account2 to account3.
+              await mirrorENSRegistrar
+                .connect(account2)
+                .changeLabelOwner(label, account3.address);
+            });
 
-            const subdomainOwner = await ensRegistry.owner(
-              ethers.utils.namehash(`${label}.mirror.xyz`)
-            );
-            expect(subdomainOwner).to.eq(account3.address);
+            it("updates ownership", async () => {
+              const result = await mirrorENSRegistrar.labelOwner(label);
+              expect(result).to.eq(account3.address);
 
-            // const subdomainOwner = await ensRegistry.owner(
-            // 	ethers.utils.namehash(`${label}.mirror.xyz`)
-            //   );
-            //   expect(subdomainOwner).to.eq(account2.address);
-          });
+              const subdomainOwner = await ensRegistry.owner(
+                ethers.utils.namehash(`${label}.mirror.xyz`)
+              );
+              expect(subdomainOwner).to.eq(account3.address);
+            });
 
-          it("prevents another account from changing ownership", async () => {
-            const transaction = mirrorENSRegistrar
-              .connect(account1)
-              .changeSubnodeOwner(label, account3.address);
-            await expect(transaction).to.be.revertedWith(
-              "MirrorENSManager: sender does not own label"
-            );
+            it("updates resolved address", async () => {
+              const subdomainAddr = await mirrorENSResolver.addr(
+                ethers.utils.namehash(`${label}.mirror.xyz`)
+              );
+              expect(subdomainAddr).to.eq(account3.address);
+            });
+
+            it("prevents another account from changing ownership", async () => {
+              const transaction = mirrorENSRegistrar
+                .connect(account2)
+                .changeLabelOwner(label, account1.address);
+              await expect(transaction).to.be.revertedWith(
+                "MirrorENSManager: sender does not own label"
+              );
+            });
           });
         });
       });

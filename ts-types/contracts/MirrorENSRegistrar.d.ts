@@ -22,8 +22,8 @@ import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 
 interface MirrorENSRegistrarInterface extends ethers.utils.Interface {
   functions: {
+    "changeLabelOwner(string,address)": FunctionFragment;
     "changeRootNodeOwner(address)": FunctionFragment;
-    "changeSubnodeOwner(string,address)": FunctionFragment;
     "ensRegistry()": FunctionFragment;
     "ensResolver()": FunctionFragment;
     "labelOwner(string)": FunctionFragment;
@@ -37,12 +37,12 @@ interface MirrorENSRegistrarInterface extends ethers.utils.Interface {
   };
 
   encodeFunctionData(
-    functionFragment: "changeRootNodeOwner",
-    values: [string]
+    functionFragment: "changeLabelOwner",
+    values: [string, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "changeSubnodeOwner",
-    values: [string, string]
+    functionFragment: "changeRootNodeOwner",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "ensRegistry",
@@ -74,11 +74,11 @@ interface MirrorENSRegistrarInterface extends ethers.utils.Interface {
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "changeRootNodeOwner",
+    functionFragment: "changeLabelOwner",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "changeSubnodeOwner",
+    functionFragment: "changeRootNodeOwner",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -131,6 +131,18 @@ export class MirrorENSRegistrar extends Contract {
   interface: MirrorENSRegistrarInterface;
 
   functions: {
+    changeLabelOwner(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "changeLabelOwner(string,address)"(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
     changeRootNodeOwner(
       _newOwner: string,
       overrides?: Overrides
@@ -138,18 +150,6 @@ export class MirrorENSRegistrar extends Contract {
 
     "changeRootNodeOwner(address)"(
       _newOwner: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    changeSubnodeOwner(
-      label_: string,
-      newOwner_: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    "changeSubnodeOwner(string,address)"(
-      label_: string,
-      newOwner_: string,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
@@ -211,6 +211,18 @@ export class MirrorENSRegistrar extends Contract {
     "writeToken()"(overrides?: CallOverrides): Promise<[string]>;
   };
 
+  changeLabelOwner(
+    label_: string,
+    newOwner_: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "changeLabelOwner(string,address)"(
+    label_: string,
+    newOwner_: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
   changeRootNodeOwner(
     _newOwner: string,
     overrides?: Overrides
@@ -218,18 +230,6 @@ export class MirrorENSRegistrar extends Contract {
 
   "changeRootNodeOwner(address)"(
     _newOwner: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  changeSubnodeOwner(
-    label_: string,
-    newOwner_: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  "changeSubnodeOwner(string,address)"(
-    label_: string,
-    newOwner_: string,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
@@ -291,6 +291,18 @@ export class MirrorENSRegistrar extends Contract {
   "writeToken()"(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
+    changeLabelOwner(
+      label_: string,
+      newOwner_: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "changeLabelOwner(string,address)"(
+      label_: string,
+      newOwner_: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     changeRootNodeOwner(
       _newOwner: string,
       overrides?: CallOverrides
@@ -298,18 +310,6 @@ export class MirrorENSRegistrar extends Contract {
 
     "changeRootNodeOwner(address)"(
       _newOwner: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    changeSubnodeOwner(
-      label_: string,
-      newOwner_: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "changeSubnodeOwner(string,address)"(
-      label_: string,
-      newOwner_: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -388,6 +388,18 @@ export class MirrorENSRegistrar extends Contract {
   };
 
   estimateGas: {
+    changeLabelOwner(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "changeLabelOwner(string,address)"(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
     changeRootNodeOwner(
       _newOwner: string,
       overrides?: Overrides
@@ -395,18 +407,6 @@ export class MirrorENSRegistrar extends Contract {
 
     "changeRootNodeOwner(address)"(
       _newOwner: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    changeSubnodeOwner(
-      label_: string,
-      newOwner_: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    "changeSubnodeOwner(string,address)"(
-      label_: string,
-      newOwner_: string,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
@@ -469,6 +469,18 @@ export class MirrorENSRegistrar extends Contract {
   };
 
   populateTransaction: {
+    changeLabelOwner(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "changeLabelOwner(string,address)"(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
     changeRootNodeOwner(
       _newOwner: string,
       overrides?: Overrides
@@ -476,18 +488,6 @@ export class MirrorENSRegistrar extends Contract {
 
     "changeRootNodeOwner(address)"(
       _newOwner: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    changeSubnodeOwner(
-      label_: string,
-      newOwner_: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    "changeSubnodeOwner(string,address)"(
-      label_: string,
-      newOwner_: string,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 

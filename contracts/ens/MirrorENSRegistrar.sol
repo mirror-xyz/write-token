@@ -148,7 +148,7 @@ contract MirrorENSRegistrar is IMirrorENSRegistrar, Ownable {
         return ensRegistry.owner(node);
     }
 
-    function changeSubnodeOwner(string calldata label_, address newOwner_)
+    function changeLabelOwner(string calldata label_, address newOwner_)
         external
         override
     {
