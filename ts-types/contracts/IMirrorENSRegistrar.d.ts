@@ -22,33 +22,36 @@ import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 
 interface IMirrorENSRegistrarInterface extends ethers.utils.Interface {
   functions: {
+    "changeLabelOwner(string,address)": FunctionFragment;
     "changeRootNodeOwner(address)": FunctionFragment;
+    "labelOwner(string)": FunctionFragment;
     "register(string,address)": FunctionFragment;
-    "updateENSReverseRegistrar()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "changeLabelOwner",
+    values: [string, string]
+  ): string;
   encodeFunctionData(
     functionFragment: "changeRootNodeOwner",
     values: [string]
   ): string;
+  encodeFunctionData(functionFragment: "labelOwner", values: [string]): string;
   encodeFunctionData(
     functionFragment: "register",
     values: [string, string]
   ): string;
-  encodeFunctionData(
-    functionFragment: "updateENSReverseRegistrar",
-    values?: undefined
-  ): string;
 
+  decodeFunctionResult(
+    functionFragment: "changeLabelOwner",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "changeRootNodeOwner",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "labelOwner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "register", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "updateENSReverseRegistrar",
-    data: BytesLike
-  ): Result;
 
   events: {};
 }
@@ -67,6 +70,18 @@ export class IMirrorENSRegistrar extends Contract {
   interface: IMirrorENSRegistrarInterface;
 
   functions: {
+    changeLabelOwner(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "changeLabelOwner(string,address)"(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
     changeRootNodeOwner(
       newOwner_: string,
       overrides?: Overrides
@@ -76,6 +91,13 @@ export class IMirrorENSRegistrar extends Contract {
       newOwner_: string,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
+
+    labelOwner(label: string, overrides?: CallOverrides): Promise<[string]>;
+
+    "labelOwner(string)"(
+      label: string,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     register(
       label_: string,
@@ -88,15 +110,19 @@ export class IMirrorENSRegistrar extends Contract {
       owner_: string,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
-
-    updateENSReverseRegistrar(
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    "updateENSReverseRegistrar()"(
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
   };
+
+  changeLabelOwner(
+    label_: string,
+    newOwner_: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "changeLabelOwner(string,address)"(
+    label_: string,
+    newOwner_: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
 
   changeRootNodeOwner(
     newOwner_: string,
@@ -107,6 +133,13 @@ export class IMirrorENSRegistrar extends Contract {
     newOwner_: string,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
+
+  labelOwner(label: string, overrides?: CallOverrides): Promise<string>;
+
+  "labelOwner(string)"(
+    label: string,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   register(
     label_: string,
@@ -120,15 +153,19 @@ export class IMirrorENSRegistrar extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
-  updateENSReverseRegistrar(
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  "updateENSReverseRegistrar()"(
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
   callStatic: {
+    changeLabelOwner(
+      label_: string,
+      newOwner_: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "changeLabelOwner(string,address)"(
+      label_: string,
+      newOwner_: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     changeRootNodeOwner(
       newOwner_: string,
       overrides?: CallOverrides
@@ -138,6 +175,13 @@ export class IMirrorENSRegistrar extends Contract {
       newOwner_: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    labelOwner(label: string, overrides?: CallOverrides): Promise<string>;
+
+    "labelOwner(string)"(
+      label: string,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     register(
       label_: string,
@@ -150,15 +194,23 @@ export class IMirrorENSRegistrar extends Contract {
       owner_: string,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    updateENSReverseRegistrar(overrides?: CallOverrides): Promise<void>;
-
-    "updateENSReverseRegistrar()"(overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {};
 
   estimateGas: {
+    changeLabelOwner(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "changeLabelOwner(string,address)"(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
     changeRootNodeOwner(
       newOwner_: string,
       overrides?: Overrides
@@ -167,6 +219,13 @@ export class IMirrorENSRegistrar extends Contract {
     "changeRootNodeOwner(address)"(
       newOwner_: string,
       overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    labelOwner(label: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "labelOwner(string)"(
+      label: string,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     register(
@@ -180,13 +239,21 @@ export class IMirrorENSRegistrar extends Contract {
       owner_: string,
       overrides?: Overrides
     ): Promise<BigNumber>;
-
-    updateENSReverseRegistrar(overrides?: Overrides): Promise<BigNumber>;
-
-    "updateENSReverseRegistrar()"(overrides?: Overrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    changeLabelOwner(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "changeLabelOwner(string,address)"(
+      label_: string,
+      newOwner_: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
     changeRootNodeOwner(
       newOwner_: string,
       overrides?: Overrides
@@ -195,6 +262,16 @@ export class IMirrorENSRegistrar extends Contract {
     "changeRootNodeOwner(address)"(
       newOwner_: string,
       overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    labelOwner(
+      label: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "labelOwner(string)"(
+      label: string,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     register(
@@ -206,14 +283,6 @@ export class IMirrorENSRegistrar extends Contract {
     "register(string,address)"(
       label_: string,
       owner_: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    updateENSReverseRegistrar(
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    "updateENSReverseRegistrar()"(
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
   };

@@ -4,18 +4,9 @@ pragma solidity 0.6.8;
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IENS} from "./interfaces/IENS.sol";
 import {IENSResolver} from "./interfaces/IENSResolver.sol";
-import {IENSReverseRegistrar} from "./interfaces/IENSReverseRegistrar.sol";
 import {IMirrorENSRegistrar} from "./interfaces/IMirrorENSRegistrar.sol";
 
 contract MirrorENSRegistrar is IMirrorENSRegistrar, Ownable {
-    // ============ Constants ============
-
-    /**
-     * namehash('addr.reverse')
-     */
-    bytes32 public constant ADDR_REVERSE_NODE =
-        0x91d1777781884d03a6757a803996e38de2a42967fb37eeaca72729271025a9e2;
-
     // ============ Immutable Storage ============
 
     /**
@@ -46,18 +37,11 @@ contract MirrorENSRegistrar is IMirrorENSRegistrar, Ownable {
      */
     IENSResolver public immutable ensResolver;
 
-    // ============ Mutable Storage ============
-
-    /**
-     * Set by anyone to the correct address after configuration,
-     * to prevent a lookup on each registration.
-     */
-    IENSReverseRegistrar public reverseRegistrar;
-
     // ============ Events ============
 
     event RootNodeOwnerChange(bytes32 indexed node, address indexed owner);
     event RegisteredENS(address indexed _owner, string _ens);
+    event UpdatedENS(address indexed _owner, string _ens);
 
     // ============ Modifiers ============
 
@@ -104,7 +88,7 @@ contract MirrorENSRegistrar is IMirrorENSRegistrar, Ownable {
 
     /**
      * @notice Assigns an ENS subdomain of the root node to a target address.
-     * Registers both the forward and reverse ENS. Can only be called by writeToken.
+     * Registers both the forward. Can only be called by writeToken.
      * @param label_ The subdomain label.
      * @param owner_ The owner of the subdomain.
      */
@@ -131,20 +115,15 @@ contract MirrorENSRegistrar is IMirrorENSRegistrar, Ownable {
         );
         ensResolver.setAddr(node, owner_);
 
-        // Reverse ENS
-        string memory name = string(abi.encodePacked(label_, ".", rootName));
-        bytes32 reverseNode = reverseRegistrar.node(owner_);
-        ensResolver.setName(reverseNode, name);
-
-        emit RegisteredENS(owner_, name);
+        emit RegisteredENS(owner_, label_);
     }
 
     // ============ ENS Management ============
 
     /**
-     * @notice This function must be called when the ENS Manager contract is replaced
-     * and the address of the new Manager should be provided.
-     * @param _newOwner The address of the new ENS manager that will manage the root node.
+     * @notice This function must be called when the ENSRegistrar contract is replaced
+     * and the address of the new ENSRegistrar should be provided.
+     * @param _newOwner The address of the new ENS Registrar that will manage the root node.
      */
     function changeRootNodeOwner(address _newOwner)
         external
@@ -155,12 +134,45 @@ contract MirrorENSRegistrar is IMirrorENSRegistrar, Ownable {
         emit RootNodeOwnerChange(rootNode, _newOwner);
     }
 
-    /**
-     * @notice Updates to the reverse registrar.
-     */
-    function updateENSReverseRegistrar() external override onlyOwner {
-        reverseRegistrar = IENSReverseRegistrar(
-            ensRegistry.owner(ADDR_REVERSE_NODE)
+    // ============ ENS Subnode Management ============
+
+    function labelOwner(string calldata label)
+        external
+        view
+        override
+        returns (address)
+    {
+        bytes32 labelNode = keccak256(abi.encodePacked(label));
+        bytes32 node = keccak256(abi.encodePacked(rootNode, labelNode));
+
+        return ensRegistry.owner(node);
+    }
+
+    function changeLabelOwner(string calldata label_, address newOwner_)
+        external
+        override
+    {
+        bytes32 labelNode = keccak256(abi.encodePacked(label_));
+        bytes32 node = keccak256(abi.encodePacked(rootNode, labelNode));
+
+        require(
+            ensRegistry.owner(node) == msg.sender,
+            "MirrorENSManager: sender does not own label"
+        );
+
+        // Forward ENS
+        ensRegistry.setSubnodeRecord(
+            rootNode,
+            labelNode,
+            newOwner_,
+            address(ensResolver),
+            0
+        );
+        ensResolver.setAddr(node, newOwner_);
+
+        emit UpdatedENS(
+            newOwner_,
+            string(abi.encodePacked(label_, ".", rootName))
         );
     }
 }

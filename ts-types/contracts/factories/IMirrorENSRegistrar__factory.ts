@@ -20,6 +20,24 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "string",
+        name: "label_",
+        type: "string",
+      },
+      {
+        internalType: "address",
+        name: "newOwner_",
+        type: "address",
+      },
+    ],
+    name: "changeLabelOwner",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "newOwner_",
         type: "address",
@@ -28,6 +46,25 @@ const _abi = [
     name: "changeRootNodeOwner",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "label",
+        type: "string",
+      },
+    ],
+    name: "labelOwner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -44,13 +81,6 @@ const _abi = [
       },
     ],
     name: "register",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "updateENSReverseRegistrar",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

@@ -8,9 +8,11 @@
   "scripts": {
     "test": "hardhat test",
     "flatten": "npx hardhat flatten contracts/MirrorWriteToken.sol > flattened/MirrorWriteToken.sol",
-    "fix:flatten": "sed -i '' '/\/\/SPDX/,+1 d' flattened/MirrorWriteToken.sol",
+    "fix:flatten": "sed -i '' '///SPDX/,+1 d' flattened/MirrorWriteToken.sol",
     "deploy:default": "hardhat run scripts/deploy.ts",
-    "deploy:rinkeby": "hardhat run --network rinkeby scripts/deploy.ts"
+    "deploy:rinkeby": "hardhat run --network rinkeby scripts/deploy.ts",
+    "deploy:registrar:default": "hardhat run scripts/deploy-registrar.ts",
+    "deploy:registrar:rinkeby": "hardhat run --network rinkeby scripts/deploy-registrar.ts"
   },
   "dependencies": {
     "@nomiclabs/hardhat-solhint": "^2.0.0",
