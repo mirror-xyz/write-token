@@ -121,9 +121,9 @@ contract MirrorENSRegistrar is IMirrorENSRegistrar, Ownable {
     // ============ ENS Management ============
 
     /**
-     * @notice This function must be called when the ENS Manager contract is replaced
-     * and the address of the new Manager should be provided.
-     * @param _newOwner The address of the new ENS manager that will manage the root node.
+     * @notice This function must be called when the ENSRegistrar contract is replaced
+     * and the address of the new ENSRegistrar should be provided.
+     * @param _newOwner The address of the new ENS Registrar that will manage the root node.
      */
     function changeRootNodeOwner(address _newOwner)
         external

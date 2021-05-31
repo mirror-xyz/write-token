@@ -12,6 +12,8 @@ export type { MirrorBatchRegistration } from "./MirrorBatchRegistration";
 export type { WriteDistributionHelperV1 } from "./WriteDistributionHelperV1";
 export type { IMirrorWriteToken } from "./IMirrorWriteToken";
 export type { MirrorWriteToken } from "./MirrorWriteToken";
+export type { IENS } from "./IENS";
+export type { PublicationRoles } from "./PublicationRoles";
 
 export { Ownable__factory } from "./factories/Ownable__factory";
 export { IENS__factory } from "./factories/IENS__factory";
@@ -24,3 +26,5 @@ export { MirrorBatchRegistration__factory } from "./factories/MirrorBatchRegistr
 export { WriteDistributionHelperV1__factory } from "./factories/WriteDistributionHelperV1__factory";
 export { IMirrorWriteToken__factory } from "./factories/IMirrorWriteToken__factory";
 export { MirrorWriteToken__factory } from "./factories/MirrorWriteToken__factory";
+export { IENS__factory } from "./factories/IENS__factory";
+export { PublicationRoles__factory } from "./factories/PublicationRoles__factory";

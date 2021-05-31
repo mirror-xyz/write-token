@@ -8,6 +8,12 @@ async function setup() {
   const ensRegistry = await ENSRegistry.deploy();
   await ensRegistry.deployed();
 
+  const PublicationRoles = await ethers.getContractFactory(
+    "PublicationRoles"
+  );
+  const publicationRoles = await PublicationRoles.deploy(ensRegistry.address);
+  await publicationRoles.deployed();
+
   const MirrorWriteToken = await ethers.getContractFactory("MirrorWriteToken");
   const mirrorWriteToken = await MirrorWriteToken.deploy();
   await mirrorWriteToken.deployed();
@@ -68,6 +74,7 @@ async function setup() {
     mirrorENSResolver,
     mirrorBatchRegistration,
     writeDistributionHelper,
+    publicationRoles
   };
 }
 
