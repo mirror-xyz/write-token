@@ -82,13 +82,19 @@ describe("PublicationRoles", () => {
     });
 
     describe("#modifyRole", () => {
+      const roleName = "WRITER";
+      
       describe("when called by the publication owner", () => {
-        it("creates a new role", async () => {
-          const role = await publicationRoles.encodeRole("WRITER");
+        let receipt;
 
-          await publicationRoles
+        it("creates a new role", async () => {
+          const role = await publicationRoles.encodeRole(roleName);
+
+          const tx = await publicationRoles
             .connect(account2)
-            .modifyRole(account2.address, publicationNode, role);
+            .modifyRole(account2.address, publicationNode, roleName);
+
+          receipt = await tx.wait();
 
           const stored = await publicationRoles.getRole(
             account2.address,
@@ -96,6 +102,16 @@ describe("PublicationRoles", () => {
           );
 
           expect(stored).to.eq(role);
+        });
+
+        it("emits an event with the role name", async () => {
+          const { args } = publicationRoles.interface.parseLog(
+            receipt.events[0]
+          );
+
+          expect(args.publicationNode).to.eq(publicationNode);
+          expect(args.contributor).to.eq(account2.address);
+          expect(args.roleName).to.eq(roleName);
         });
       });
 

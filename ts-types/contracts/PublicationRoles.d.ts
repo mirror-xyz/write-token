@@ -26,7 +26,7 @@ interface PublicationRolesInterface extends ethers.utils.Interface {
     "ens()": FunctionFragment;
     "getContributorId(address,bytes32)": FunctionFragment;
     "getRole(address,bytes32)": FunctionFragment;
-    "modifyRole(address,bytes32,bytes32)": FunctionFragment;
+    "modifyRole(address,bytes32,string)": FunctionFragment;
     "ownsPublication(bytes32,address)": FunctionFragment;
     "publicationOwner(bytes32)": FunctionFragment;
     "roles(bytes32)": FunctionFragment;
@@ -44,7 +44,7 @@ interface PublicationRolesInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "modifyRole",
-    values: [string, BytesLike, BytesLike]
+    values: [string, BytesLike, string]
   ): string;
   encodeFunctionData(
     functionFragment: "ownsPublication",
@@ -74,7 +74,11 @@ interface PublicationRolesInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "roles", data: BytesLike): Result;
 
-  events: {};
+  events: {
+    "ModifiedRole(bytes32,address,string)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "ModifiedRole"): EventFragment;
 }
 
 export class PublicationRoles extends Contract {
@@ -129,14 +133,14 @@ export class PublicationRoles extends Contract {
     modifyRole(
       contributor: string,
       publicationNode: BytesLike,
-      role: BytesLike,
+      roleName: string,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
-    "modifyRole(address,bytes32,bytes32)"(
+    "modifyRole(address,bytes32,string)"(
       contributor: string,
       publicationNode: BytesLike,
-      role: BytesLike,
+      roleName: string,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
@@ -208,14 +212,14 @@ export class PublicationRoles extends Contract {
   modifyRole(
     contributor: string,
     publicationNode: BytesLike,
-    role: BytesLike,
+    roleName: string,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
-  "modifyRole(address,bytes32,bytes32)"(
+  "modifyRole(address,bytes32,string)"(
     contributor: string,
     publicationNode: BytesLike,
-    role: BytesLike,
+    roleName: string,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
@@ -284,14 +288,14 @@ export class PublicationRoles extends Contract {
     modifyRole(
       contributor: string,
       publicationNode: BytesLike,
-      role: BytesLike,
+      roleName: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    "modifyRole(address,bytes32,bytes32)"(
+    "modifyRole(address,bytes32,string)"(
       contributor: string,
       publicationNode: BytesLike,
-      role: BytesLike,
+      roleName: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -325,7 +329,13 @@ export class PublicationRoles extends Contract {
     ): Promise<string>;
   };
 
-  filters: {};
+  filters: {
+    ModifiedRole(
+      publicationNode: BytesLike | null,
+      contributor: string | null,
+      roleName: null
+    ): EventFilter;
+  };
 
   estimateGas: {
     encodeRole(roleName: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -366,14 +376,14 @@ export class PublicationRoles extends Contract {
     modifyRole(
       contributor: string,
       publicationNode: BytesLike,
-      role: BytesLike,
+      roleName: string,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
-    "modifyRole(address,bytes32,bytes32)"(
+    "modifyRole(address,bytes32,string)"(
       contributor: string,
       publicationNode: BytesLike,
-      role: BytesLike,
+      roleName: string,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
@@ -449,14 +459,14 @@ export class PublicationRoles extends Contract {
     modifyRole(
       contributor: string,
       publicationNode: BytesLike,
-      role: BytesLike,
+      roleName: string,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
-    "modifyRole(address,bytes32,bytes32)"(
+    "modifyRole(address,bytes32,string)"(
       contributor: string,
       publicationNode: BytesLike,
-      role: BytesLike,
+      roleName: string,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
