@@ -19,7 +19,7 @@ const config = {
 };
 
 const NETWORK_MAP = {
-  "0": "mainnet",
+  "1": "mainnet",
   "3": "ropsten",
   "4": "rinkeby",
   "1337": "hardhat",
